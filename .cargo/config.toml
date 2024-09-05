@@ -1,0 +1,12 @@
+[net]
+git-fetch-with-cli = true
+
+[profile]
+
+[profile.dioxus-client]
+inherits = "dev"
+opt-level = 2
+
+[profile.dioxus-server]
+inherits = "dev"
+opt-level = 2
