@@ -8,7 +8,7 @@ axum = { version = "0.7.5", optional = true }
 # dioxus = { version = "0.6.0-alpha.2", features = ["fullstack", "router"] }
 dioxus = { git = "https://github.com/DioxusLabs/dioxus.git", rev = "9816b40", features = ["fullstack", "router"] }
 dioxus-logger = "0.5.1"
-ui = { git = "https://github.com/chungwong/rayquaza.git" , rev = "a6c7485"}
+ui = { git = "https://github.com/chungwong/rayquaza.git" , rev = "763c722"}
 serde = { version = "1.0.197", features = ["derive"] }
 tokio = { version = "1.40.0", features = ["full"], optional = true }
 tracing = "0.1.40"
