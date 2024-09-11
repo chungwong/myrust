@@ -1,7 +1,5 @@
 #![allow(non_snake_case)]
 
-// mod tabs;
-
 use dioxus::prelude::*;
 use std::error::Error;
 use tracing::Level;
@@ -31,10 +29,6 @@ fn App() -> Element {
     }
 }
 
-// fn main() {
-//     launch(App);
-// }
-
 fn main() -> Result<(), Box<dyn Error>> {
     dioxus_logger::init(Level::INFO)?;
     #[cfg(feature = "web")]
@@ -47,10 +41,19 @@ fn main() -> Result<(), Box<dyn Error>> {
         use axum::Router;
         use std::error::Error;
 
-        tokio::runtime::Runtime::new()?.block_on(async move {
-            let mut app = Router::new().serve_dioxus_application(ServeConfig::new()?, App);
+        use clap::Parser;
+        use dioxus_cli_config::{AddressArguments, RuntimeCLIArguments};
 
-            let address = std::net::SocketAddr::from(([127, 0, 0, 1], 3000));
+        tokio::runtime::Runtime::new()?.block_on(async move {
+            let app = Router::new().serve_dioxus_application(ServeConfig::new()?, App);
+
+            let cli_args = RuntimeCLIArguments::from_cli();
+            let address = cli_args
+                .as_ref()
+                .map(|args| args.fullstack_address())
+                .unwrap_or_else(AddressArguments::parse)
+                .address();
+
             let listener = tokio::net::TcpListener::bind(&address).await?;
 
             axum::serve(listener, app.into_make_service()).await?;

@@ -5,8 +5,9 @@ edition = "2021"
 
 [dependencies]
 axum = { version = "0.7.5", optional = true }
-# dioxus = { version = "0.6.0-alpha.2", features = ["fullstack", "router"] }
-dioxus = { git = "https://github.com/DioxusLabs/dioxus.git", rev = "9816b40", features = ["fullstack", "router"] }
+dioxus = { git = "https://github.com/DioxusLabs/dioxus.git", rev = "b20db13", features = ["fullstack", "router"] }
+dioxus-cli-config = { git = "https://github.com/DioxusLabs/dioxus.git", rev = "b20db13", optional = true }
+clap = { version = "4.5.17", optional = true }
 dioxus-logger = "0.5.1"
 ui = { git = "https://github.com/chungwong/rayquaza.git" , rev = "763c722"}
 serde = { version = "1.0.197", features = ["derive"] }
@@ -16,9 +17,11 @@ tracing = "0.1.40"
 [features]
 default = []
 server = [
-  "dioxus/axum",
-  "dep:tokio",
   "dep:axum",
+  "dep:clap",
+  "dep:dioxus-cli-config",
+  "dep:tokio",
+  "dioxus/axum",
 ]
 web = ["dioxus/web"]
 axum = ["dep:axum"]
