@@ -9,7 +9,7 @@ dioxus = { git = "https://github.com/DioxusLabs/dioxus.git", rev = "b20db13", fe
 dioxus-cli-config = { git = "https://github.com/DioxusLabs/dioxus.git", rev = "b20db13", optional = true }
 clap = { version = "4.5.17", optional = true }
 dioxus-logger = "0.5.1"
-ui = { git = "https://github.com/chungwong/rayquaza.git" , rev = "763c722"}
+ui = { git = "https://github.com/chungwong/rayquaza.git", rev = "ff3990b"}
 serde = { version = "1.0.197", features = ["derive"] }
 tokio = { version = "1.40.0", features = ["full"], optional = true }
 tracing = "0.1.40"

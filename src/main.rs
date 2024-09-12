@@ -1,65 +1,63 @@
-#![allow(non_snake_case)]
-
 use dioxus::prelude::*;
 use std::error::Error;
-use tracing::Level;
-use ui::tabs::{TabItem, Tabs};
+use ui::datepicker::DatePicker;
 
-fn App() -> Element {
+#[component]
+fn Home() -> Element {
     rsx! {
-        head::Link { rel: "stylesheet", href: asset!("./assets/tailwind.css") }
+        "Home"
+    }
+}
 
-        Tabs {
-            default_active_id: "Tab 1",
-            items: vec![
-                TabItem {
-                    id: "Tab 1".to_string(),
-                    children: rsx! {
-                        "tab 1 content"
-                    },
-                },
-                TabItem {
-                    id: "Tab 2".to_string(),
-                    children: rsx! {
-                        "tab 2 content"
-                    },
-                },
-            ]
+#[derive(Clone, Routable, Debug, PartialEq, serde::Serialize, serde::Deserialize)]
+#[rustfmt::skip]
+pub(crate) enum Route {
+    #[layout(Template)]
+        #[route("/")]
+        Home {},
+        #[route("/test")]
+        Test { },
+}
+
+#[component]
+fn Test() -> Element {
+    rsx! {
+        DatePicker { }
+    }
+}
+
+#[component]
+fn Header() -> Element {
+    rsx! {
+        div { class: "hidden lg:block lg:flex-1",
+            "Hello World"
+        }
+        Link {
+            to: Route::Test { },
+            "A Link"
         }
     }
 }
 
+#[component]
+fn Template() -> Element {
+    rsx! {
+        div {
+            Header {  }
+            main { Outlet::<Route> {} }
+        }
+    }
+}
+
+#[component]
+pub(crate) fn App() -> Element {
+    rsx! {
+        Router::<Route> {}
+    }
+}
+
 fn main() -> Result<(), Box<dyn Error>> {
-    dioxus_logger::init(Level::INFO)?;
-    #[cfg(feature = "web")]
-    {
-        launch(App);
-    }
-
-    #[cfg(feature = "server")]
-    {
-        use axum::Router;
-        use std::error::Error;
-
-        use clap::Parser;
-        use dioxus_cli_config::{AddressArguments, RuntimeCLIArguments};
-
-        tokio::runtime::Runtime::new()?.block_on(async move {
-            let app = Router::new().serve_dioxus_application(ServeConfig::new()?, App);
-
-            let cli_args = RuntimeCLIArguments::from_cli();
-            let address = cli_args
-                .as_ref()
-                .map(|args| args.fullstack_address())
-                .unwrap_or_else(AddressArguments::parse)
-                .address();
-
-            let listener = tokio::net::TcpListener::bind(&address).await?;
-
-            axum::serve(listener, app.into_make_service()).await?;
-
-            Ok::<(), Box<dyn Error>>(())
-        })?;
-    }
+    dioxus_logger::init(tracing::Level::INFO)?;
+    launch(App);
     Ok(())
 }
